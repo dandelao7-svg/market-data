@@ -1,0 +1,15 @@
+{
+  "name": "market-data-pipeline",
+  "version": "1.0.0",
+  "description": "Weekly Redfin market-data ingestion into Postgres",
+  "main": "ingest.js",
+  "scripts": {
+    "start": "node ingest.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}
