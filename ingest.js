@@ -102,6 +102,14 @@ function buildHeaderMap(headerFields) {
   return map;
 }
 
+// Remove surrounding double-quotes that Redfin wraps around every field.
+function stripQuotes(s) {
+  if (s === undefined || s === null) return s;
+  let t = String(s).trim();
+  if (t.length >= 2 && t.startsWith('"') && t.endsWith('"')) t = t.slice(1, -1);
+  return t;
+}
+
 // Parse a numeric cell -> Number or null. Strips $ and commas defensively.
 function num(v) {
   if (v === undefined || v === null) return null;
@@ -162,7 +170,9 @@ function processFile(regionType, url, isTracked, diag) {
         headerMap[name] === undefined ? null : fields[headerMap[name]];
 
       rl.on("line", (line) => {
-        const fields = line.split("\t");
+        // Redfin wraps every field (and every header) in double quotes,
+        // e.g.  "All Residential"  -> strip them so filters/values match.
+        const fields = line.split("\t").map(stripQuotes);
 
         // First line = header. Build the name->index map and print it
         // once so you can eyeball the real column list on first run.
